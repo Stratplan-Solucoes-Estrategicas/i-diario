@@ -1,0 +1,3 @@
+# Garante LF nos scripts shell mesmo em checkout Windows (autocrlf),
+# senao o shebang #!/bin/bash quebra dentro dos containers Docker.
+script/start text eol=lf
