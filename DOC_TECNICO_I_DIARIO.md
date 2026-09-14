@@ -672,11 +672,11 @@ docker-compose up --build
 # script/start faz: bundle check||install, yarn install, gera secrets.yml,
 # cp database.sample.yml, rails db:create db:migrate,
 # rails entity:setup NAME=prefeitura DOMAIN=localhost DATABASE=idiario,
-# rails entity:admin:create NAME=prefeitura ADMIN_PASSWORD=A123456789$,
+# rails entity:admin:create NAME=prefeitura ADMIN_PASSWORD=Mudar@123,
 # cp 404/500 samples, touch .setup, rm server.pid
 ```
 
-Acesso: Puma `0.0.0.0:3000` mapeado p/ `${DOCKER_APP_PORT:-80}` [REF: docker-compose.yml:31-37]; login `admin / A123456789$` (só dev); sync i-Educar em `Configurações > API de Integração`.
+Acesso: Puma `0.0.0.0:3000` mapeado p/ `${DOCKER_APP_PORT:-80}` [REF: docker-compose.yml:31-37]; login `admin / Mudar@123` (só dev); sync i-Educar em `Configurações > API de Integração`.
 
 Comandos dia a dia [REF: CLAUDE.md:61-81]:
 
@@ -800,7 +800,7 @@ Estilo não criticado sem evidência (conforme exigido).
 
 # 24. Guia para desenvolvedor júnior
 
-1. **Primeiro dia:** leia este doc + `CLAUDE.md` + `INSTALL.md`; suba `docker-compose up`; logue `admin/A123456789$`; troque papel/escola no header (`CurrentRole`); rode 1 spec (`student_spec.rb`) e `rubocop` no arquivo que tocar.
+1. **Primeiro dia:** leia este doc + `CLAUDE.md` + `INSTALL.md`; suba `docker-compose up`; logue `admin/Mudar@123`; troque papel/escola no header (`CurrentRole`); rode 1 spec (`student_spec.rb`) e `rubocop` no arquivo que tocar.
 2. **Regra de ouro multi-tenant:** tudo roda dentro de uma `Entity`. Nunca teste com `rails console` sem `Entity.find_by(name:'prefeitura').using_connection{...}`. Nunca hardcode `id`.
 3. **Onde mexer (resumo):** tela → `app/views/` + `app/assets/`; regra → `app/services/`; leitura pesada → `app/queries/`; permissão → `app/policies/`; async → `app/workers/`; relatório → `app/reports/`; tradução → `config/locales/`.
 4. **Checklist antes do PR:** `authorize` adicionado? `strong_params`? `audited` mantido? N+1 checado (`Bullet`)? índice p/ novo `WHERE/JOIN`? spec RSpec com Factory (sem `save(validate:false)`)? `structure.sql` commitado se migration? teste manual como professor + admin + pai?

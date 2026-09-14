@@ -176,7 +176,7 @@ bundle exec rails db:create
 bundle exec rails db:migrate
 
 echo "bundle exec rails entity:setup NAME=idiario DOMAIN=$(hostname -I | awk '{print $1}') DATABASE=idiario" | bash
-bundle exec rails entity:admin:create NAME=idiario ADMIN_PASSWORD=A123456789$
+bundle exec rails entity:admin:create NAME=idiario ADMIN_PASSWORD=Mudar@123
 ```
 
 Após os passos acima, o i-Diário estará completamente instalado e é preciso subir os serviços necessários para o
@@ -216,7 +216,7 @@ bundle exec sidekiq -c 10 --logfile log/sidekiq.log
 
 Acesse [http://localhost:3000](http://localhost:3000) ou o IP do seu servidor para fazer o seu primeiro acesso.
 
-O usuário padrão é: `admin` / A senha padrão é: `A123456789$`.
+O usuário padrão é: `admin` / A senha padrão é: `Mudar@123`.
 
 Assim que realizar seu primeiro acesso **não se esqueça de alterar a senha padrão**.
 
