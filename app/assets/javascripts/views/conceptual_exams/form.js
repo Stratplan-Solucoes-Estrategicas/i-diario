@@ -321,7 +321,7 @@ $(function() {
             format: "json"
           })
         ).done(function(data) {
-          old_values = data.old_steps_conceptual_values;
+          old_values = data;
           makeOldValuesHeader();
         })
       ).then(function() {
