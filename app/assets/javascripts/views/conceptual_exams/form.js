@@ -106,8 +106,42 @@ $(function() {
           };
         }
       );
+
+      buildAssignConceptToAllMenu();
     }
   }
+
+  function buildAssignConceptToAllMenu() {
+    var $menu = $("#assign-concept-to-all-menu");
+    $menu.html("");
+
+    _.each(window.roundingTableValues, function(rounding_table_value) {
+      var $item = $("<li/>").append(
+        $("<a/>")
+          .attr("href", "#")
+          .addClass("assign-concept-to-all-option")
+          .attr("data-value-id", rounding_table_value.id)
+          .text(rounding_table_value.text)
+      );
+
+      $menu.append($item);
+    });
+  }
+
+  $(document).on("click", ".assign-concept-to-all-option", function(event) {
+    event.preventDefault();
+
+    var value_id = $(this).data("value-id");
+
+    $("input.conceptual-exam-value-select2").each(function() {
+      var $select = $(this);
+      var $row = $select.closest("tr");
+
+      if ($row.is(":visible") && !$select.prop("readonly")) {
+        $select.select2("val", value_id).trigger("change");
+      }
+    });
+  });
 
   function handleFetchExamRuleError() {
     flashMessages.error(
