@@ -1,5 +1,6 @@
 <% content_for :js do %>
   <%= javascript_include_tag 'beta_function' %>
+  <%= javascript_include_tag 'views/conceptual_exams_in_batchs/edit_multiple' %>
 <% end %>
 
 <%= simple_form_for @conceptual_exams.first, url: create_or_update_multiple_conceptual_exams_in_batchs_path, method: :put,
@@ -31,6 +32,15 @@
   </fieldset>
 
   <fieldset>
+    <div class="pull-right dropdown" style="margin-bottom: 10px;">
+      <button type="button" id="btn-assign-concept-to-all" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <%= t('.assign_concept_to_all') %> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" id="assign-concept-to-all-menu"></ul>
+    </div>
+
+    <div class="clearfix"></div>
+
     <table class="table table-bordered table-condensed" id="conceptual_exam_values_table">
       <thead>
       <th><%= ConceptualExam.human_attribute_name :student_id %></th>
