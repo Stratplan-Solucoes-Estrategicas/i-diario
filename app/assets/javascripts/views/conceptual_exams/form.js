@@ -143,6 +143,70 @@ $(function() {
     });
   });
 
+  $("#btn-repeat-previous-period-concepts").on("click", function() {
+    var classroom_id = $classroom.select2("val");
+    var student_id = $student.select2("val");
+    var step_id = $step.select2("val");
+
+    if (_.isEmpty(classroom_id) || _.isEmpty(student_id) || _.isEmpty(step_id)) {
+      flashMessages.error(
+        "Selecione a turma, a etapa e o aluno antes de repetir os conceitos do período anterior."
+      );
+      return;
+    }
+
+    $.ajax({
+      url: Routes.previous_period_conceptual_values_conceptual_exams_pt_br_path({
+        classroom_id: classroom_id,
+        student_id: student_id,
+        step_id: step_id,
+        format: "json"
+      }),
+      success: handleFetchPreviousPeriodConceptsSuccess,
+      error: handleFetchPreviousPeriodConceptsError
+    });
+  });
+
+  function handleFetchPreviousPeriodConceptsSuccess(previous_values) {
+    if (_.isEmpty(previous_values)) {
+      flashMessages.error(
+        "Não há conceitos lançados no período anterior para este aluno."
+      );
+      return;
+    }
+
+    var valid_value_ids = _.map(window.roundingTableValues, function(
+      rounding_table_value
+    ) {
+      return "" + rounding_table_value.id;
+    });
+
+    $("tr input[id$=discipline_id]").each(function() {
+      var discipline_id = $(this).val();
+      var previous_value = previous_values[discipline_id];
+
+      if (
+        _.isUndefined(previous_value) ||
+        !_.contains(valid_value_ids, "" + previous_value)
+      ) {
+        return;
+      }
+
+      var $row = $(this).closest("tr");
+      var $select = $row.find("input.conceptual-exam-value-select2");
+
+      if ($row.is(":visible") && $select.length && !$select.prop("readonly")) {
+        $select.select2("val", previous_value).trigger("change");
+      }
+    });
+  }
+
+  function handleFetchPreviousPeriodConceptsError() {
+    flashMessages.error(
+      "Ocorreu um erro ao buscar os conceitos do período anterior."
+    );
+  }
+
   function handleFetchExamRuleError() {
     flashMessages.error(
       "Ocorreu um erro ao buscar a regra de avaliação do aluno selecionado."

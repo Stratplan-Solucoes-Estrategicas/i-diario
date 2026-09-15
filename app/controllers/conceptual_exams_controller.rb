@@ -155,6 +155,14 @@ class ConceptualExamsController < ApplicationController
     render json: find_conceptual_exam.try(:id)
   end
 
+  def previous_period_conceptual_values
+    classroom = Classroom.find(params[:classroom_id])
+    student = Student.find(params[:student_id])
+    step = steps_fetcher(classroom).step_by_id(params[:step_id])
+
+    render json: PreviousStepConceptualValuesFetcher.new(classroom, student, step).fetch
+  end
+
   def find_step_number_by_classroom
     classroom = Classroom.find(params[:classroom_id])
     step_numbers = StepsFetcher.new(classroom)&.steps

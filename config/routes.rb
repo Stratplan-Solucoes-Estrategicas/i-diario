@@ -351,6 +351,7 @@ Rails.application.routes.draw do
         get :fetch_students_by_classroom
         get :fetch_score_type
         get :fetch_steps
+        get :previous_period_conceptual_values
       end
     end
     resources :conceptual_exams_in_batchs, concerns: :history do

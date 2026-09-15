@@ -48,6 +48,14 @@
       <ul class="dropdown-menu dropdown-menu-right" id="assign-concept-to-all-menu"></ul>
     </div>
 
+    <div class="pull-left" style="margin-bottom: 10px;">
+      <button type="button" id="btn-repeat-previous-period-concepts" class="btn btn-default">
+        <i class="fa fa-repeat"></i> <%= t('.repeat_previous_period_concepts') %>
+      </button>
+    </div>
+
+    <div class="clearfix"></div>
+
     <table class="table table-bordered table-condensed" id="conceptual_exam_values_table">
       <thead>
         <th><%= ConceptualExamValue.human_attribute_name :discipline %></th>
