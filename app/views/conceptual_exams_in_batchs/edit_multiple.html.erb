@@ -28,6 +28,12 @@
       <div class="col col-sm-3">
         <%= f.input :recorded_at, input_html: { value: I18n.l(first_conceptual_exam.recorded_at || @recorded_at) }, readonly: true %>
       </div>
+
+      <div class="col col-sm-3">
+        <%= f.input :discipline_id, as: :select2, elements: [selected_discipline], readonly: true,
+                    input_html: { value: selected_discipline.id },
+                    label: ConceptualExamValue.human_attribute_name(:discipline) %>
+      </div>
     </div>
   </fieldset>
 

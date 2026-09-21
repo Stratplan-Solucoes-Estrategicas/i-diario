@@ -358,6 +358,7 @@ Rails.application.routes.draw do
       collection do
         get :edit_multiple
         get :get_steps
+        get :get_descriptors
         put :create_or_update_multiple
         delete :destroy_multiple
       end
@@ -392,6 +393,13 @@ Rails.application.routes.draw do
       end
     end
     get 'daily_frequency/history_multiple', to: 'daily_frequencies#history_multiple', as: 'history_multiple_daily_frequency'
+
+    resources :daily_frequency_compensations, only: [:index, :new, :create] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
 
     resources :absence_justifications, concerns: :history do
       collection do

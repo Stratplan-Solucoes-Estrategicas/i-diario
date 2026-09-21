@@ -1,5 +1,7 @@
 pt-BR:
   conceptual_exams_in_batchs:
+    form:
+      descriptor_id: 'Objetivo de aprendizagem'
     messages:
       create_success: 'Avaliações conceituais foram criadas ou atualizadas com sucesso!'
       create_error: 'Ocorreu um erro ao criar as avaliações conceituais!'

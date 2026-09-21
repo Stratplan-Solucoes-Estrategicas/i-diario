@@ -29,6 +29,20 @@
       <div class="col col-sm-4">
         <%= f.input :recorded_at %>
       </div>
+
+      <div class="col col-sm-4">
+        <%= f.input :discipline_id, as: :select2, elements: disciplines_by_current_profile,
+                    label: ConceptualExamValue.human_attribute_name(:discipline),
+                    required: true, readonly: @conceptual_exam.persisted? %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-sm-4">
+        <%= f.input :descriptor_id, as: :select2, elements: [],
+                    label: t('conceptual_exams_in_batchs.form.descriptor_id'),
+                    required: true, readonly: @conceptual_exam.persisted? %>
+      </div>
     </div>
   </fieldset>
 

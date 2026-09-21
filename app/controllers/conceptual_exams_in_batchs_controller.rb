@@ -6,7 +6,6 @@ class ConceptualExamsInBatchsController < ApplicationController
   before_action :require_current_teacher
   before_action :adjusted_period
   before_action :require_allow_to_modify_prev_years, only: %i[create update destroy_multiple]
-  before_action :require_specific_teacher
   before_action :set_classroom_and_step, only: %i[create create_or_update_multiple]
 
   def index
@@ -81,7 +80,7 @@ class ConceptualExamsInBatchsController < ApplicationController
     @conceptual_exams = []
     errors = []
 
-    student_enrollments(@step.start_at, @step.end_at, @classroom).each do |student_enrollment|
+    student_enrollments(@step.start_at, @step.end_at, @classroom, selected_discipline).each do |student_enrollment|
       @conceptual_exams << base_service.find_or_initialize_conceptual_exam(
         student_enrollment.student_id,
         resource_params[:recorded_at],
@@ -99,7 +98,7 @@ class ConceptualExamsInBatchsController < ApplicationController
       conceptual_exam.assign_attributes(resource_params) unless conceptual_exam.persisted?
 
       conceptual_exam_value = conceptual_exam.conceptual_exam_values
-                                             .find_or_initialize_by(discipline_id: current_user_discipline.id)
+                                             .find_or_initialize_by(discipline_id: selected_discipline.id)
 
       if !conceptual_exam.persisted? && conceptual_exam_value.invalid?
         errors << conceptual_exam_value.errors
@@ -155,6 +154,12 @@ class ConceptualExamsInBatchsController < ApplicationController
     render json: steps_to_select2(params[:classroom_id])
   end
 
+  def get_descriptors
+    return if params[:discipline_id].blank?
+
+    render json: descriptors_to_select2(params[:discipline_id])
+  end
+
   private
 
   def steps_to_select2(classroom_id)
@@ -173,6 +178,20 @@ class ConceptualExamsInBatchsController < ApplicationController
     steps_to_select2
   end
 
+  def descriptors_to_select2(discipline_id)
+    descriptors_for_discipline(Discipline.find(discipline_id)).map do |descriptor|
+      OpenStruct.new(id: descriptor.id, name: descriptor.description, text: descriptor.description)
+    end
+  end
+
+  def descriptors_for_discipline(discipline)
+    descriptors = Discipline.where(descriptor: true, knowledge_area_id: discipline.knowledge_area_id)
+                            .by_teacher_and_classroom(current_teacher_id, current_user_classroom.id)
+                            .ordered
+
+    descriptors.presence || [discipline]
+  end
+
   def resource_params
     params.require(:conceptual_exam).permit(
       :unity_id,
@@ -180,6 +199,8 @@ class ConceptualExamsInBatchsController < ApplicationController
       :recorded_at,
       :student_id,
       :step_id,
+      :discipline_id,
+      :descriptor_id,
       conceptual_exam_values_attributes: %i[
         student_id
         id
@@ -206,7 +227,7 @@ class ConceptualExamsInBatchsController < ApplicationController
 
   def fetch_student_enrollments(first_conceptual_exam)
     student_enrollments(first_conceptual_exam.step.start_at,
-                        first_conceptual_exam.step.end_at, @classroom)
+                        first_conceptual_exam.step.end_at, @classroom, selected_discipline)
   end
 
   def mark_exempted_disciplines_for_exam(conceptual_exam)
@@ -230,13 +251,13 @@ class ConceptualExamsInBatchsController < ApplicationController
     @steps_fetcher ||= StepsFetcher.new(classroom)
   end
 
-  def student_enrollments(start_at, end_at, classroom)
-    step_student_enrollments = "#{start_at}_#{end_at}_student_enrollments_#{classroom}"
+  def student_enrollments(start_at, end_at, classroom, discipline = current_user_discipline)
+    step_student_enrollments = "#{start_at}_#{end_at}_student_enrollments_#{classroom.id}_#{discipline&.id}"
 
     Rails.cache.fetch(step_student_enrollments, expires_in: 10.minutes) do
       StudentEnrollmentsList.new(
         classroom: classroom,
-        discipline: current_user_discipline,
+        discipline: discipline,
         start_at: start_at,
         end_at: end_at,
         score_type: StudentEnrollmentScoreTypeFilters::CONCEPT,
@@ -245,6 +266,25 @@ class ConceptualExamsInBatchsController < ApplicationController
       ).student_enrollments
     end
   end
+
+  def selected_discipline
+    @selected_discipline ||= if resource_params[:descriptor_id].present?
+                                Discipline.find(resource_params[:descriptor_id])
+                              elsif resource_params[:discipline_id].present?
+                                Discipline.find(resource_params[:discipline_id])
+                              else
+                                current_user_discipline
+                              end
+  end
+  helper_method :selected_discipline
+
+  def disciplines_by_current_profile
+    Discipline.not_descriptor
+              .by_teacher_and_classroom(current_teacher_id, current_user_classroom.id)
+              .by_score_type(ScoreTypes::CONCEPT)
+              .ordered
+  end
+  helper_method :disciplines_by_current_profile
 
   def old_values
     @old_values ||= {}
@@ -338,24 +378,6 @@ class ConceptualExamsInBatchsController < ApplicationController
       end
 
       status
-    end
-  end
-
-  def require_specific_teacher
-    return unless current_teacher_discipline_classroom.allow_absence_by_discipline.zero?
-
-    flash[:alert] = t('errors.general.require_specific_teacher')
-
-    redirect_to root_path
-  end
-
-  def current_teacher_discipline_classroom
-    cache_key = "#{current_user_classroom.id}_#{current_teacher.id}"
-
-    Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
-      TeacherDisciplineClassroom.by_classroom(current_user_classroom)
-                                .by_teacher_id(current_teacher.id)
-                                .first
     end
   end
 

@@ -13,7 +13,7 @@ class ConceptualExam < ActiveRecord::Base
   audited
   has_associated_audits
 
-  attr_accessor :unity_id
+  attr_accessor :unity_id, :discipline_id, :descriptor_id
 
   before_destroy :valid_for_destruction?
 
