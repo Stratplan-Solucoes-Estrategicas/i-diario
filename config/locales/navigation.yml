@@ -78,6 +78,8 @@ pt-BR:
     infrequency_trackings: "Acompanhamento de infrequências"
     lessons_boards: "Quadro de aulas"
     daily_frequencies_in_batchs: "Frequência em lote"
+    daily_frequency_compensations: "Aula de compensação"
+    daily_frequency_compensations_approval: "Aprovação de aulas de compensação"
     copy_discipline_teaching_plan: "Copiar planos de ensino por disciplina"
     copy_knowledge_area_teaching_plan: "Copiar planos de ensino por área de conhecimento"
     attendance_record_report_by_students: "Registro de frequência por aluno"

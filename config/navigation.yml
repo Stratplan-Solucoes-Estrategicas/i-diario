@@ -87,6 +87,14 @@ navigation:
             path: "new_daily_frequencies_in_batch_path"
             icon: "fa-cubes"
         - menu:
+            type: "daily_frequency_compensations"
+            path: "new_daily_frequency_compensation_path"
+            icon: "fa-exchange"
+        - menu:
+            type: "daily_frequency_compensations_approval"
+            path: "daily_frequency_compensations_path"
+            icon: "fa-check-square-o"
+        - menu:
             type: "absence_justifications"
             path: "absence_justifications_path"
         - menu:

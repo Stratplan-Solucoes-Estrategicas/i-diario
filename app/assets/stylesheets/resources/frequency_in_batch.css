@@ -66,3 +66,48 @@ label.checkbox-frequency.justified input[type=checkbox]:not(:checked) + i::after
 .frequency-legend-button {
   margin-left: 15px;
 }
+
+.frequency-in-batch-table-wrapper {
+  overflow: auto;
+  max-height: 70vh;
+  width: 100%;
+}
+
+.frequency-in-batch-table-wrapper table {
+  margin-bottom: 0;
+}
+
+.frequency-in-batch-table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+  box-shadow: inset 0 -1px 0 #ddd;
+}
+
+@media screen and (max-width: 992px) {
+  .frequency-in-batch-table-wrapper {
+    max-height: 60vh;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .frequency-in-batch-table-wrapper {
+    max-height: 50vh;
+  }
+
+  .frequency-in-batch-table-wrapper th,
+  .frequency-in-batch-table-wrapper td {
+    font-size: 12px;
+    padding: 4px !important;
+  }
+
+  .frequency-legend {
+    justify-content: flex-start;
+    padding: 10px;
+  }
+
+  .frequency-legend-item {
+    margin: 5px 10px 5px 0;
+  }
+}

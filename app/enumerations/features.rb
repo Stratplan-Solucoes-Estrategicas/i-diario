@@ -15,6 +15,8 @@ class Features < EnumerateIt::Base
                    :copy_knowledge_area_teaching_plan,
                    :custom_rounding_tables,
                    :daily_frequencies,
+                   :daily_frequency_compensations,
+                   :daily_frequency_compensations_approval,
                    :daily_notes,
                    :data_exportations,
                    :descriptive_exams,

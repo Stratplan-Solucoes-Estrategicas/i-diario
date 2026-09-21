@@ -1,0 +1,18 @@
+pt-BR:
+  daily_frequency_compensations:
+    new:
+      info: 'Use esta tela para registrar uma aula fora do seu Quadro de Aula, para compensar carga horária não cumprida. O pedido só passa a valer depois de aprovado pelo pedagogo/coordenador.'
+      save: 'Enviar para aprovação'
+    create:
+      success: 'Pedido de aula de compensação enviado para aprovação.'
+      error: 'Não foi possível registrar o pedido de aula de compensação.'
+    index:
+      by_status: 'Filtrar situação'
+      approve: 'Aprovar'
+      reject: 'Rejeitar'
+      confirm_approve: 'Confirma a aprovação desta aula de compensação? A frequência passará a poder ser lançada normalmente para essa data.'
+      reject_prompt: 'Motivo da rejeição:'
+    approve:
+      success: 'Aula de compensação aprovada.'
+    reject:
+      success: 'Aula de compensação rejeitada.'

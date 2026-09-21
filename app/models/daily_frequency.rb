@@ -24,6 +24,7 @@ class DailyFrequency < ApplicationRecord
   belongs_to :discipline
   belongs_to :school_calendar
   belongs_to :teacher, foreign_key: :owner_teacher_id
+  belongs_to :daily_frequency_compensation, optional: true
 
   has_enumeration_for :period, with: Periods, skip_validation: true
 

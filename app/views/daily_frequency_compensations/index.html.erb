@@ -1,0 +1,57 @@
+<% content_for :js do %>
+  <%= javascript_include_tag 'views/daily_frequency_compensations/index' %>
+<% end %>
+
+<div class="widget-body no-padding">
+  <%= simple_form_for :filter, { url: daily_frequency_compensations_path, method: :get,
+    html: { class: 'filterable_search_form' } } do |f| %>
+    <div class="table-responsive">
+      <table id="resources" class="table table-bordered table-only-inner-bordered table-striped table-condensed table-hover">
+        <thead>
+          <tr>
+            <th scope="col" colspan="6">
+              <%= f.input :status, as: :select2,
+                elements: DailyFrequencyCompensationStatus.to_a.map { |label, value| { id: value, name: label, text: label } }.to_json,
+                label: false, placeholder: t('.by_status'),
+                input_html: { value: params[:status].presence || DailyFrequencyCompensationStatus::PENDING } %>
+            </th>
+          </tr>
+
+          <tr>
+            <th scope="col"><%= DailyFrequencyCompensation.human_attribute_name :teacher %></th>
+            <th scope="col"><%= DailyFrequencyCompensation.human_attribute_name :classroom %></th>
+            <th scope="col"><%= DailyFrequencyCompensation.human_attribute_name :discipline %></th>
+            <th scope="col"><%= DailyFrequencyCompensation.human_attribute_name :compensation_date %></th>
+            <th scope="col"><%= DailyFrequencyCompensation.human_attribute_name :reason %></th>
+            <th scope="col" style="width: 180px"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @daily_frequency_compensations.each do |compensation| %>
+            <tr>
+              <td><%= compensation.teacher.to_s %></td>
+              <td><%= compensation.classroom.to_s %></td>
+              <td><%= compensation.discipline.try(:to_s) %></td>
+              <td><%= l(compensation.compensation_date, format: :default) %></td>
+              <td><%= compensation.reason %></td>
+              <td>
+                <% if compensation.pending? %>
+                  <%= link_to t('.approve'), approve_daily_frequency_compensation_path(compensation),
+                        method: :patch, data: { confirm: t('.confirm_approve') }, class: 'btn btn-primary btn-xs' %>
+                  <%= link_to t('.reject'), reject_daily_frequency_compensation_path(compensation),
+                        method: :patch, class: 'btn btn-danger btn-xs reject-compensation-link',
+                        data: { 'reject-prompt' => t('.reject_prompt') } %>
+                <% else %>
+                  <span class="label label-<%= compensation.approved? ? 'success' : 'danger' %>">
+                    <%= DailyFrequencyCompensationStatus.t(compensation.status) %>
+                  </span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

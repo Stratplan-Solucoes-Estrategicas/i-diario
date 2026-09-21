@@ -1,0 +1,27 @@
+pt-BR:
+  activerecord:
+    models:
+      daily_frequency_compensation: "Aula de compensação"
+    attributes:
+      daily_frequency_compensation:
+        teacher: "Professor"
+        teacher_id: "Professor"
+        unity: "Escola"
+        unity_id: "Escola"
+        classroom: "Turma"
+        classroom_id: "Turma"
+        discipline: "Componente curricular"
+        discipline_id: "Componente curricular"
+        compensation_date: "Data da compensação"
+        lesson_numbers: "Aulas"
+        reason: "Motivo"
+        status: "Situação"
+        approved_by: "Aprovado/rejeitado por"
+        approved_at: "Data da análise"
+        rejection_reason: "Motivo da rejeição"
+    errors:
+      models:
+        daily_frequency_compensation:
+          attributes:
+            compensation_date:
+              must_be_less_than_or_equal_to_today: "deve ser menor ou igual a data de hoje"

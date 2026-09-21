@@ -494,17 +494,22 @@ class DailyFrequenciesInBatchsController < ApplicationController
       grade_id = @classroom.classrooms_grades.first.grade_id
       valid_day = SchoolDayChecker.new(school_calendar, date, grade_id, @classroom.id, nil).day_allows_entry?
 
-      next if allocations.empty? || !valid_day
+      next unless valid_day
+
+      compensation = approved_compensation_for(date)
+
+      next if allocations.empty? && compensation.blank?
 
       if @frequency_type == FrequencyTypes::BY_DISCIPLINE
         allocations.each { |allocattion| lesson_numbers << allocattion.lessons_board_lesson.lesson_number.to_i }
+        lesson_numbers.concat(compensation.lesson_numbers.map(&:to_i)) if compensation.present?
         allocation_dates << build_hash(date, lesson_numbers.sort.uniq)
       else
         allocation_dates << build_hash(date, nil)
       end
     end
 
-    allocation_dates.first(15)
+    allocation_dates
   end
 
   def find_or_initialize_daily_frequency_by(date, lesson_number, unity_id, classroom_id, discipline_id, period)
@@ -518,9 +523,27 @@ class DailyFrequenciesInBatchsController < ApplicationController
       daily_frequency_record.school_calendar_id = current_school_calendar.id
       daily_frequency_record.owner_teacher_id = daily_frequency_record.teacher_id = current_teacher_id
       daily_frequency_record.origin = OriginTypes::WEB
+
+      compensation = approved_compensation_for(date)
+      daily_frequency_record.daily_frequency_compensation_id = compensation.id if compensation.present?
     end
 
     daily_frequency
+  end
+
+  def approved_compensation_for(date)
+    return nil if @classroom.blank?
+
+    discipline_id = @frequency_type == FrequencyTypes::BY_DISCIPLINE ? @discipline&.id : nil
+
+    DailyFrequencyCompensation.approved
+                              .where(
+                                teacher_id: current_teacher_id,
+                                classroom_id: @classroom.id,
+                                discipline_id: discipline_id,
+                                compensation_date: date
+                              )
+                              .first
   end
 
   def build_hash(date, lesson_numbers)
