@@ -6,6 +6,7 @@ class DailyFrequencyQuery
       .by_frequency_date_between(filters[:frequency_date])
       .by_discipline_id(filters[:discipline_id], filters[:all_students_frequencies])
       .by_class_number(filters[:class_numbers], filters[:all_students_frequencies])
+      .by_owner_teacher_id(filters[:owner_teacher_id])
       .includes([students: :student], :school_calendar, :discipline, :classroom, :unity)
   end
 
@@ -46,6 +47,12 @@ class DailyFrequencyQuery
       array_class_numbers = class_numbers.split(',')
 
       where(class_number: array_class_numbers)
+    end
+
+    def by_owner_teacher_id(owner_teacher_id)
+      return self if owner_teacher_id.blank?
+
+      where(owner_teacher_id: owner_teacher_id)
     end
   end
 end

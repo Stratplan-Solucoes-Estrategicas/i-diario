@@ -394,13 +394,6 @@ Rails.application.routes.draw do
     end
     get 'daily_frequency/history_multiple', to: 'daily_frequencies#history_multiple', as: 'history_multiple_daily_frequency'
 
-    resources :daily_frequency_compensations, only: [:index, :new, :create] do
-      member do
-        patch :approve
-        patch :reject
-      end
-    end
-
     resources :absence_justifications, concerns: :history do
       collection do
         get :valid_teacher_period_in_classroom

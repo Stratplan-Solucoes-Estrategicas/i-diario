@@ -1,6 +1,0 @@
-pt-BR:
-  enumerations:
-    daily_frequency_compensation_status:
-      pending: 'Pendente'
-      approved: 'Aprovado'
-      rejected: 'Rejeitado'

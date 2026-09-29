@@ -40,7 +40,8 @@ class AttendanceRecordReportForm
       period: period,
       frequency_date: start_at..end_at,
       discipline_id: !global_absence? && discipline_id,
-      class_numbers: !global_absence? && class_numbers
+      class_numbers: !global_absence? && class_numbers,
+      owner_teacher_id: global_absence? && current_teacher_id
     ).group_by(&:frequency_date).map do |frequency_date, frequencies|
       if frequencies.map(&:class_number).uniq.size > 1
         frequencies
