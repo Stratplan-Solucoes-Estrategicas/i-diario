@@ -120,7 +120,8 @@
       </div>
     <% end %>
 
-    <table class="table table-bordered table-only-inner-bordered table-striped table-hover">
+    <div class="frequency-in-batch-scroll">
+    <table class="table table-bordered table-only-inner-bordered table-striped table-hover frequency-in-batch-table">
       <thead>
       <th style="width: 20px; text-align: center;">Seq.</th>
       <th><%= DailyFrequencyStudent.human_attribute_name :student %></th>
@@ -177,6 +178,7 @@
       <%= image_tag "beta.png", class: 'hidden', id: 'image-beta' %>
       </tbody>
     </table>
+    </div>
     <footer>
       <div class="pull-left">
         <%= link_to 'Voltar', new_daily_frequencies_in_batch_path, class: 'btn btn-default pull-left' %>

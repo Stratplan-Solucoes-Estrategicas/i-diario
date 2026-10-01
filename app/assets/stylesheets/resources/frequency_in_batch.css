@@ -66,3 +66,45 @@ label.checkbox-frequency.justified input[type=checkbox]:not(:checked) + i::after
 .frequency-legend-button {
   margin-left: 15px;
 }
+
+/* Cabeçalho da tabela de frequência em lote fixo ao rolar, pra não perder de
+   vista qual dia/coluna corresponde a cada checkbox conforme a lista de alunos
+   desce.
+
+   A tabela ganha seu próprio container de rolagem (.frequency-in-batch-scroll)
+   em vez de depender da rolagem da janela. Isso é o que faz funcionar também no
+   celular, por dois motivos:
+
+   1. position: sticky se resolve contra o container de rolagem mais próximo. O
+      wrapper global #content-page tem overflow-x: auto, e como o valor
+      computado de overflow-y também vira auto, ele JÁ é um container de
+      rolagem — mas, sem altura limitada, nunca rola de fato, então o sticky
+      fica preso nele e não gruda em lugar nenhum. Com max-height aqui, o
+      container rola de verdade e o cabeçalho tem onde grudar.
+   2. O scroll horizontal (essencial no celular, onde o período tem mais dias
+      que a largura da tela) passa a viver dentro desta tabela. Antes a rolagem
+      lateral era a do #content-page, que não pode ser desligada sob risco de
+      cortar as últimas datas e impedir o lançamento da frequência nelas.
+
+   border-collapse: collapse (herdado de .table-bordered) quebra
+   position: sticky em th/td no Chrome — trocado por separate, com
+   border-spacing: 0 pra não abrir espaço entre as células. Escopado só a esta
+   tabela (este arquivo só é carregado nesta tela). */
+.frequency-in-batch-scroll {
+  overflow: auto;
+  max-height: 75vh;
+  -webkit-overflow-scrolling: touch;
+}
+
+.frequency-in-batch-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.frequency-in-batch-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+  box-shadow: 0 1px 0 0 #ddd;
+}
