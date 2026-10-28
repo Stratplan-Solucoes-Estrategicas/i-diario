@@ -1,40 +1,45 @@
-label.checkbox-frequency input[type=checkbox]:checked + i {
-  border-color: #28a745 !important;
+/* Os seletores abaixo levam `.checkbox` junto de `.checkbox-frequency` — as
+   duas classes já vêm no mesmo label — para vencer por especificidade as
+   regras do tema (`.smart-style-N .smart-form .checkbox input + i`), que de
+   outro modo sobrescreveriam as cores da legenda e exigiriam `!important`. */
+
+label.checkbox.checkbox-frequency input[type=checkbox]:checked + i {
+  border-color: #28a745;
 }
 
-label.checkbox-frequency input[type=checkbox]:checked + i::after {
+label.checkbox.checkbox-frequency input[type=checkbox]:checked + i::after {
   color: #28a745;
 }
 
-label.checkbox-frequency input[type=checkbox]:checked:hover + i::after {
-  content: '\f00c' !important;
+label.checkbox.checkbox-frequency input[type=checkbox]:checked:hover + i::after {
+  content: '\f00c';
 }
 
-label.checkbox-frequency input[type=checkbox]:not(:checked) + i {
-  border-color: #dc3545 !important;
+label.checkbox.checkbox-frequency input[type=checkbox]:not(:checked) + i {
+  border-color: #dc3545;
 }
 
-label.checkbox-frequency input[type=checkbox]:not(:checked) + i::after {
-  color: #dc3545 !important;
-  content: '\f00d' !important;
+label.checkbox.checkbox-frequency input[type=checkbox]:not(:checked) + i::after {
+  color: #dc3545;
+  content: '\f00d';
   opacity: 1;
 }
 
-label.checkbox-frequency.partial-absence input[type=checkbox] + i {
-  border-color: #0779fb !important;
+label.checkbox.checkbox-frequency.partial-absence input[type=checkbox] + i {
+  border-color: #0779fb;
 }
 
-label.checkbox-frequency.partial-absence input[type=checkbox] + i::after {
-  color: #0779fb !important;
+label.checkbox.checkbox-frequency.partial-absence input[type=checkbox] + i::after {
+  color: #0779fb;
 }
 
-label.checkbox-frequency.justified input[type=checkbox]:not(:checked) + i {
-  border-color: #0779fb !important;
+label.checkbox.checkbox-frequency.justified input[type=checkbox]:not(:checked) + i {
+  border-color: #0779fb;
 }
 
-label.checkbox-frequency.justified input[type=checkbox]:not(:checked) + i::after {
-  color: #0779fb !important;
-  content: 'FJ' !important;
+label.checkbox.checkbox-frequency.justified input[type=checkbox]:not(:checked) + i::after {
+  color: #0779fb;
+  content: 'FJ';
   font: bold 12px/19px Arial, sans-serif;
   letter-spacing: -1px;
 }
